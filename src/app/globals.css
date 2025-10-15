@@ -10,4 +10,8 @@
   button {
     @apply border border-white p-1;
   }
+
+  input, textarea {
+    @apply text-black;
+  }
 }

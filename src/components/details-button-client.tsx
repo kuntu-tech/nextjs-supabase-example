@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { type User } from "@supabase/supabase-js";
 import Link from "next/link";
+import LoginButton from "./login-button";
 
 export default function DetailsButtonClient({ user }: { user: User | null }) {
   const [isHidden, setIsHidden] = useState(true);
@@ -31,7 +32,10 @@ export default function DetailsButtonClient({ user }: { user: User | null }) {
           )}
         </>
       ) : (
-        <p>user is not logged in</p>
+        <div className="space-y-2">
+          <p>user is not logged in</p>
+          <LoginButton />
+        </div>
       )}
     </>
   );

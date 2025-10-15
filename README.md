@@ -1,27 +1,217 @@
-# Supabase Example
+# Next.js + Supabase + Prisma 示例项目
 
-## Configure Providers
+这是一个集成了 Next.js、Supabase 和 Prisma 的完整示例项目，支持一键部署到 Render。
 
-In the Supabase dashboard , go to `Authorization > Providers`, and configure the provider you want with the necessary credentials
+## 🚀 快速开始
 
-- [Google OAuth Credentials Setup](https://youtu.be/_XM9ziOzWk4?si=00qdQYmhBqbY1Qcn)
-- [GitHub OAuth Credentials Setup](https://egghead.io/lessons/supabase-create-an-oauth-app-with-github)
+### 1. 克隆项目
 
-## Project Setup
-
-In the nextjs project, create `env.local` in the root of the project and add:
-
-```.env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```bash
+git clone <your-repo-url>
+cd nextjs-supabase-example
+npm install
 ```
 
-You can get these values from your Supabase dashboard `Project Settings > Data API`
+### 2. 配置环境变量
 
-> [!NOTE]  
-> When the app is deployed, set the deployment URL as the `Site URL` in the supabase dashboard at `Authentication > URL Configuration`
+复制 `env.example` 文件为 `.env.local`：
 
-## Configure Supabase Clients
+```bash
+cp env.example .env.local
+```
+
+然后编辑 `.env.local` 文件，填入你的 Supabase 项目信息：
+
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Database Configuration (Supabase PostgreSQL)
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
+```
+
+### 3. 设置数据库
+
+```bash
+# 生成 Prisma 客户端
+npm run db:generate
+
+# 推送数据库 schema 到 Supabase
+npm run db:push
+```
+
+### 4. 启动开发服务器
+
+```bash
+npm run dev
+```
+
+访问 [http://localhost:3000](http://localhost:3000) 查看应用。
+
+## 🎯 项目特性
+
+- ✅ **Next.js 14** with App Router
+- ✅ **Supabase** 认证和数据库
+- ✅ **Prisma** ORM 支持
+- ✅ **TypeScript** 类型安全
+- ✅ **Tailwind CSS** 样式
+- ✅ **一键部署到 Render**
+
+## 🔧 技术栈
+
+- **前端**: Next.js 14, React 18, TypeScript, Tailwind CSS
+- **后端**: Next.js API Routes
+- **数据库**: Supabase PostgreSQL
+- **ORM**: Prisma
+- **认证**: Supabase Auth
+- **部署**: Render
+
+## 📁 项目结构
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API 路由
+│   │   └── posts/         # 文章相关 API
+│   ├── auth/              # 认证相关页面
+│   └── page.tsx           # 首页
+├── components/            # React 组件
+│   ├── posts-list.tsx     # 文章列表组件
+│   └── ...
+├── lib/                   # 工具库
+│   ├── prisma.ts          # Prisma 客户端
+│   └── supabase/          # Supabase 客户端
+└── middleware.ts          # Next.js 中间件
+```
+
+## 🚀 部署到 Render
+
+### 方法一：使用 render.yaml（推荐）
+
+1. 将代码推送到 GitHub
+2. 在 Render 控制台选择 "New Web Service"
+3. 连接你的 GitHub 仓库
+4. Render 会自动检测 `render.yaml` 文件
+5. 配置环境变量：
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `DATABASE_URL`
+6. 点击 "Deploy"
+
+### 方法二：手动配置
+
+1. 在 Render 创建新的 Web Service
+2. 选择 "Build and deploy from a Git repository"
+3. 连接你的 GitHub 仓库
+4. 配置以下设置：
+   - **Build Command**: `npm install && npm run db:generate && npm run build`
+   - **Start Command**: `npm start`
+   - **Node Version**: 18.x
+5. 添加环境变量（同上）
+6. 点击 "Deploy"
+
+## 🔐 配置 Supabase
+
+### 1. 创建 Supabase 项目
+
+1. 访问 [Supabase](https://supabase.com)
+2. 创建新项目
+3. 获取项目 URL 和 API Key
+
+### 2. 配置认证提供商
+
+在 Supabase 控制台，进入 `Authentication > Providers`，配置你需要的 OAuth 提供商：
+
+- [Google OAuth 设置指南](https://youtu.be/_XM9ziOzWk4?si=00qdQYmhBqbY1Qcn)
+- [GitHub OAuth 设置指南](https://egghead.io/lessons/supabase-create-an-oauth-app-with-github)
+
+### 3. 配置 URL
+
+部署后，在 Supabase 控制台的 `Authentication > URL Configuration` 中设置：
+- **Site URL**: `https://your-app.onrender.com`
+- **Redirect URLs**: `https://your-app.onrender.com/auth/callback`
+
+## 📚 使用说明
+
+### 认证功能
+
+项目包含完整的用户认证功能：
+
+- **登录/登出**: 支持 Google、GitHub 等 OAuth 提供商
+- **用户信息**: 显示用户头像、姓名、邮箱等信息
+- **会话管理**: 自动处理用户会话状态
+
+### 文章管理
+
+项目包含一个简单的文章管理系统：
+
+- **创建文章**: 登录用户可以创建新文章
+- **查看文章**: 显示所有文章列表
+- **作者信息**: 显示文章作者信息
+
+### API 接口
+
+- `GET /api/posts` - 获取所有文章
+- `POST /api/posts` - 创建新文章（需要登录）
+
+## 🔧 开发指南
+
+### 添加新的数据模型
+
+1. 在 `prisma/schema.prisma` 中定义新模型
+2. 运行 `npm run db:push` 更新数据库
+3. 运行 `npm run db:generate` 生成 Prisma 客户端
+4. 在 API 路由中使用 Prisma 客户端
+
+### 添加新的 API 路由
+
+在 `src/app/api/` 目录下创建新的路由文件，例如：
+
+```typescript
+// src/app/api/example/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
+export async function GET() {
+  // 处理 GET 请求
+}
+
+export async function POST(request: NextRequest) {
+  // 处理 POST 请求
+}
+```
+
+## 🐛 故障排除
+
+### 常见问题
+
+1. **数据库连接失败**
+   - 检查 `DATABASE_URL` 环境变量是否正确
+   - 确保 Supabase 项目已创建并运行
+
+2. **认证失败**
+   - 检查 `NEXT_PUBLIC_SUPABASE_URL` 和 `NEXT_PUBLIC_SUPABASE_ANON_KEY` 是否正确
+   - 确保在 Supabase 控制台配置了正确的重定向 URL
+
+3. **部署失败**
+   - 检查 Render 日志中的错误信息
+   - 确保所有环境变量都已正确设置
+   - 检查 Node.js 版本是否为 18.x
+
+## 📄 许可证
+
+MIT License
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+---
+
+## 原始 Supabase 配置说明
+
+### Configure Supabase Clients
 
 In `src/lib` directory, create a `supabase` directory and add:
 
